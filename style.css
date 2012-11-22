@@ -1,0 +1,11 @@
+body {
+  background:#333;
+}
+table, tbody, tr, td {
+  background: #ddd;
+  border:1px solid black;
+}
+td {
+  width:20px;
+  height:20px;
+}
