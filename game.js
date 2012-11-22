@@ -149,7 +149,7 @@ document.getElementById('start').addEventListener('click', function(){
         }
 
         /* RULES BEGIN */
-        if (ALIVE) {
+        if (cell.style.backgroundColor == ALIVE) {
 
           if (neighbours < 2) {
 
@@ -197,4 +197,4 @@ document.getElementById('start').addEventListener('click', function(){
 
   }, 1000);
 
-})
+}, false);
