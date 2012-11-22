@@ -7,8 +7,6 @@ var tbody = table.tBodies[0];
 var DEAD = '',
     ALIVE = 'rgb(255, 0, 0)';
 
-//var a, b, x, y = 0;
-
 //var firstRow = tbody.rows[0];
 
 //var c2x3 = tbody.rows[2].cells[3];
@@ -35,9 +33,9 @@ if (c0x0.style.backgroundColor == ALIVE) {
 */
 
 /* BINDING THE ALIVE EVENT TO EACH CELL */
-for (i=0; i < tbody.rows.length; i++) {
+for (var i=0; i < tbody.rows.length; i++) {
   //console.log(tbody.rows[a]);
-  for (j=0; j < tbody.rows[i].cells.length; j++) {
+  for (var j=0; j < tbody.rows[i].cells.length; j++) {
     //console.log(tbody.rows[a].cells[b]);
     tbody.rows[i].cells[j].addEventListener('click', function(ev){
 
@@ -77,53 +75,47 @@ document.getElementById('start').addEventListener('click', function(){
 
         var cell = tbody.rows[a].cells[b];
 
-        x = cell.cellIndex;
-        y = cell.parentNode.rowIndex;
+        var x = cell.cellIndex;
+        var y = cell.parentNode.rowIndex;
         // logging coords
         //console.log('X: ' + x + '; Y: ' + y);
         /*console.log('A: ' + a + '; B: ' + b);*/
 
-        // I call neighbours top, right, bottom and left.
+        // I call neighbours top, right, bottom, left,
+        // top_left, top_right, bottom_left, bottom_right.
 
         /* TOP */
         var top = (y <= 0) ? 
         null :
         tbody.rows[y-1].cells[x];
-        /*
-        if (top !== null) { 
-          top.style.backgroundColor = 'orange'; 
-        }
-        */
-
         /* RIGHT */
         var right = (x >= 9) ?
         null :
         tbody.rows[y].cells[x+1];
-        /*
-        if (right !== null) {
-          right.style.backgroundColor = 'yellow';
-        }
-        */
-
         /* BOTTOM */
         var bottom = (y >= 9) ?
         null :
-        tbody.rows[y+1].cells[x];
-        /*
-        if (bottom !== null) {
-          bottom.style.backgroundColor = 'green';
-        }
-        */
-
+        tbody.rows[y+1].cells[x];      
         /* LEFT */
         var left = (x <= 0) ?
         null :
         tbody.rows[y].cells[x-1];
-        /* 
-        if (left !== null) {
-          left.style.backgroundColor = 'blue';
-        }
-        */
+        /* TOP_LEFT */
+        var top_left = (y <= 0 || x <= 0) ? 
+        null :
+        tbody.rows[y-1].cells[x-1];
+        /* TOP_RIGHT */
+        var top_right = (y <= 0 || x >= 9) ? 
+        null :
+        tbody.rows[y-1].cells[x+1];
+        /* BOTTOM_LEFT */
+        var bottom_left = (y >= 9 || x <= 0) ? 
+        null :
+        tbody.rows[y+1].cells[x-1];
+        /* BOTTOM_RIGHT */
+        var bottom_right = (y >= 9 || x >= 9) ?
+        null :
+        tbody.rows[y+1].cells[x+1];
 
         //console.log(a);
         //var top = (a == 0 || b == 0) ? null : tbody.rows[a].cells[b-1];
@@ -135,40 +127,45 @@ document.getElementById('start').addEventListener('click', function(){
         if (top !== null && top.style.backgroundColor == ALIVE) {
           neighbours++;
         }
-
         if (right !== null && right.style.backgroundColor == ALIVE) {
           neighbours++;
         }
-
         if (bottom !== null && bottom.style.backgroundColor == ALIVE) {
           neighbours++;
         }
-
         if (left !== null && left.style.backgroundColor == ALIVE) {
           neighbours++;
         }
+        if (top_left !== null && top_left.style.backgroundColor == ALIVE) {
+          neighbours++;
+        }
+        if (top_right !== null && top_right.style.backgroundColor == ALIVE) {
+          neighbours++;
+        }
+        if (bottom_left !== null && bottom_left.style.backgroundColor == ALIVE) {
+          neighbours++;
+        }
+        if (bottom_right !== null && bottom_right.style.backgroundColor == ALIVE) {
+          neighbours++;
+        }                                
 
         /* RULES BEGIN */
         if (cell.style.backgroundColor == ALIVE) {
 
           if (neighbours < 2) {
-
             cell.className = 'dead';
           }
 
           if (neighbours == 2 || neighbours == 3) {
-
             cell.className = 'alive';
           }
 
           if (neighbours > 3) {
-
             cell.className = 'dead';
           }
 
         } else { // cell is dead
           if (neighbours == 3) {
-
             cell.className = 'alive';
           }
         }
@@ -182,7 +179,7 @@ document.getElementById('start').addEventListener('click', function(){
       for (var c=0; c < tbody.rows.length; c++) {
         //console.log(tbody.rows[c]);
         for (var d=0; d < tbody.rows[c].cells.length; d++) {
-          console.log(tbody.rows[c].cells[d]);
+          //console.log(tbody.rows[c].cells[d]);
           var nextCell = tbody.rows[c].cells[d];
           if (nextCell.className == 'alive') {
             nextCell.style.backgroundColor = ALIVE;
@@ -195,6 +192,6 @@ document.getElementById('start').addEventListener('click', function(){
 //   }
 
 
-  }, 1000);
+  }, 500);
 
 }, false);
