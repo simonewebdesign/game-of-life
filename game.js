@@ -1,8 +1,26 @@
 //var theTable = document.getElementById('tableId')
 // theTable.tBodies[0].appendChild(document.createElement('tr'))
 
-var table = document.getElementById('table')
-var tbody = table.tBodies[0]
+/* TABLE CREATION */
+var table = document.createElement('table')
+var tbody = document.createElement('tbody')
+table.appendChild(tbody)
+var nRows = 10,
+    nCols = 50
+
+for (var r=0; r < nRows; r++) {
+  tbody.appendChild(document.createElement('tr'))
+
+  for (var c=0; c < nCols; c++) {
+    tbody.rows[r].appendChild(document.createElement('td'))
+  }
+}
+
+document.getElementById('wrapper').appendChild(table)
+
+
+//var table = document.getElementById('table')
+//var tbody = table.tBodies[0]
 
 var DEAD = '',
     ALIVE = 'rgb(255, 0, 0)'
@@ -84,16 +102,19 @@ document.getElementById('start').addEventListener('click', function(){
         // I call neighbours top, right, bottom, left,
         // top_left, top_right, bottom_left, bottom_right.
 
+        var xOffset = tbody.rows[0].cells.length-1
+        var yOffset = tbody.rows.length-1
+
         /* TOP */
         var top = (y <= 0) ? 
         null :
         tbody.rows[y-1].cells[x]
         /* RIGHT */
-        var right = (x >= 9) ?
+        var right = (x >= xOffset) ?
         null :
         tbody.rows[y].cells[x+1]
         /* BOTTOM */
-        var bottom = (y >= 9) ?
+        var bottom = (y >= yOffset) ?
         null :
         tbody.rows[y+1].cells[x]      
         /* LEFT */
@@ -105,15 +126,15 @@ document.getElementById('start').addEventListener('click', function(){
         null :
         tbody.rows[y-1].cells[x-1]
         /* TOP_RIGHT */
-        var top_right = (y <= 0 || x >= 9) ? 
+        var top_right = (y <= 0 || x >= xOffset) ? 
         null :
         tbody.rows[y-1].cells[x+1]
         /* BOTTOM_LEFT */
-        var bottom_left = (y >= 9 || x <= 0) ? 
+        var bottom_left = (y >= yOffset || x <= 0) ? 
         null :
         tbody.rows[y+1].cells[x-1]
         /* BOTTOM_RIGHT */
-        var bottom_right = (y >= 9 || x >= 9) ?
+        var bottom_right = (y >= yOffset || x >= xOffset) ?
         null :
         tbody.rows[y+1].cells[x+1]
 
