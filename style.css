@@ -1,11 +1,12 @@
 body {
-  background:#333;
+  background:#000;
 }
 table, tbody, tr, td {
-  background: #ddd;
   border:1px solid black;
+  border-collapse: collapse;
 }
 td {
-  width:20px;
-  height:20px;
+  background: #111;
+  width: 8px;
+  height: 8px;
 }
