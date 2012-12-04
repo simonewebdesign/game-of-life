@@ -94,7 +94,7 @@ function World () {
     }
   }
 
-  this.spawn = function(name, x=1, y=1) {
+  this.spawn = function(name, x, y) {
     // the top-left cell is this.tbody.rows[y-1].cells[x-1]
     if (x > 0 && y > 0) { // FIXME breaks when the shape is drawn out of bounds
       if (name == 'glider') {
