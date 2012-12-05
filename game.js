@@ -1,27 +1,5 @@
-//var theTable = document.getElementById('tableId')
-// theTable.tBodies[0].appendChild(document.createElement('tr'))
-
-/*
-function green(cell) {
-  cell.style.backgroundColor = 'green' 
-}
-
-var table = document.getElementById('myTable')
-var firstCell = table.tBodies[0].rows[0].cells[0]
-green(firstCell);
-console.log(firstCell.nodeName)
-
-HTMLElement.prototype.foo = function() {
-  if (this.nodeName === 'TD') {
-    this.style.backgroundColor = 'blue'
-  }
-}
-firstCell.foo()
-*/
-
-
 /* global constants */
-var DEAD = '', // or
+var DEAD  = '',
     ALIVE = 'rgb(0, 255, 255)'
 
 /* global functions -- TODO find a better solution */
@@ -30,10 +8,9 @@ HTMLElement.prototype.live = function() {
     if (this.style.backgroundColor == ALIVE) {
       console.log('cell is already alive')
       return false
-    } else {
-      this.style.backgroundColor = ALIVE
-      return true
-    }    
+    }
+    this.style.backgroundColor = ALIVE
+    return true
   }
 }
 
@@ -42,11 +19,14 @@ HTMLElement.prototype.die = function() {
     if (this.style.backgroundColor == DEAD) {
       console.log('cell is already dead')
       return false
-    } else {
-      this.style.backgroundColor = DEAD
-      return true
     }
+    this.style.backgroundColor = DEAD
+    return true
   }
+}
+
+HTMLElement.prototype.isAlive = function() {
+  return (this.nodeName === 'TD') && (this.style.backgroundColor == ALIVE)
 }
 
 
@@ -68,9 +48,13 @@ function World () {
 
       for (var c=0; c < w.cols; c++) {
         this.tbody.rows[r].appendChild(document.createElement('td'))
+        .addEventListener('click', function(ev){
+          this.style.backgroundColor == DEAD ? 
+          this.style.backgroundColor = ALIVE : 
+          this.style.backgroundColor = DEAD
+        }, false)     
       }
     }
-
     document.getElementById('wrapper').appendChild(this.table)
     return true
   }
@@ -95,7 +79,7 @@ function World () {
   }
 
   this.spawn = function(name, x, y) {
-    // the top-left cell is this.tbody.rows[y-1].cells[x-1]
+
     if (x > 0 && y > 0) { // FIXME breaks when the shape is drawn out of bounds
       if (name == 'glider') {
 
@@ -118,64 +102,9 @@ function World () {
     return false
   }
 
-} // end of World (Apocalypse! °L°)
-
-var w = new World
-w.create()
-w.spawn('glider', 3, 3)
-w.spawn('glider', 15, 20)
-w.spawn('glider', 30, 4)
-
-/*
-var form = document.forms[0]
-form.addEventListener('submit', function(event) {
-  event.preventDefault()
-  w.update()
-}, false)
-*/
-
-//var table = document.getElementById('table')
-//var tbody = table.tBodies[0]
-
-//var firstRow = tbody.rows[0]
-
-//var c2x3 = tbody.rows[2].cells[3]
-//c2x3.style.backgroundColor = DEAD
-//var c0x0 = tbody.rows[0].cells[0]
-//c0x0.style.backgroundColor = ALIVE
+} // end of World
 
 
-/* LOOPING
-for (var a=0; a < tbody.rows.length; a++) {
-//console.log(tbody.rows[a])
-  for (var b=0; b < tbody.rows[a].cells.length; b++) {
-  //console.log(tbody.rows[a].cells[b])
-  }
-}
-*/
-
-//console.log(tbody.rows[3].cells[4].style.backgroundColor)
-
-/*
-if (c0x0.style.backgroundColor == ALIVE) {
-  console.log('alive')
-}
-*/
-
-/* BINDING THE ALIVE EVENT TO EACH CELL */
-for (var i=0; i < w.tbody.rows.length; i++) {
-  //console.log(tbody.rows[a])
-  for (var j=0; j < w.tbody.rows[i].cells.length; j++) {
-    //console.log(tbody.rows[a].cells[b])
-    w.tbody.rows[i].cells[j].addEventListener('click', function(ev){
-
-      this.style.backgroundColor == DEAD ? 
-      this.style.backgroundColor = ALIVE : 
-      this.style.backgroundColor = DEAD
-
-    }, false)
-  }
-}
 
 /* THE GAME OF LIFE
 **
@@ -192,6 +121,12 @@ for (var i=0; i < w.tbody.rows.length; i++) {
 ** Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
 **
 */
+var w = new World
+w.create()
+w.spawn('glider', 3, 3)
+w.spawn('glider', 15, 20)
+w.spawn('glider', 30, 4)
+
 
 
 document.getElementById('start').addEventListener('click', function(){
@@ -199,23 +134,18 @@ document.getElementById('start').addEventListener('click', function(){
   setInterval(function(){
 
     for (var a=0; a < w.tbody.rows.length; a++) {
-      //console.log(tbody.rows[a])
+
       for (var b=0; b < w.tbody.rows[a].cells.length; b++) {
-        //console.log(tbody.rows[a].cells[b])
 
         var cell = w.tbody.rows[a].cells[b]
 
         var x = cell.cellIndex
         var y = cell.parentNode.rowIndex
-        // logging coords
-        //console.log('X: ' + x + '; Y: ' + y)
-        /*console.log('A: ' + a + '; B: ' + b)*/
-
-        // I call neighbours top, right, bottom, left,
-        // top_left, top_right, bottom_left, bottom_right.
 
         var xOffset = w.tbody.rows[0].cells.length-1
         var yOffset = w.tbody.rows.length-1
+
+        /* NEIGHBOURS */
 
         /* TOP */
         var top = (y <= 0) ? 
@@ -250,54 +180,28 @@ document.getElementById('start').addEventListener('click', function(){
         null :
         w.tbody.rows[y+1].cells[x+1]
 
-        //console.log(a)
-        //var top = (a == 0 || b == 0) ? null : w.tbody.rows[a].cells[b-1]
-        //top.style.backgroundColor = '#ff0000'
-
         /* NEIGHBOURS COUNT */
         var neighbours = 0
 
-        if (top !== null && top.style.backgroundColor == ALIVE) {
-          neighbours++
-        }
-        if (right !== null && right.style.backgroundColor == ALIVE) {
-          neighbours++
-        }
-        if (bottom !== null && bottom.style.backgroundColor == ALIVE) {
-          neighbours++
-        }
-        if (left !== null && left.style.backgroundColor == ALIVE) {
-          neighbours++
-        }
-        if (top_left !== null && top_left.style.backgroundColor == ALIVE) {
-          neighbours++
-        }
-        if (top_right !== null && top_right.style.backgroundColor == ALIVE) {
-          neighbours++
-        }
-        if (bottom_left !== null && bottom_left.style.backgroundColor == ALIVE) {
-          neighbours++
-        }
-        if (bottom_right !== null && bottom_right.style.backgroundColor == ALIVE) {
-          neighbours++
-        }                                
+        if ( top != null && top.isAlive() )                   { neighbours++ }
+        if ( right != null && right.isAlive() )               { neighbours++ }
+        if ( bottom != null && bottom.isAlive() )             { neighbours++ }
+        if ( left != null && left.isAlive() )                 { neighbours++ }
+        if ( top_left != null && top_left.isAlive() )         { neighbours++ }
+        if ( top_right != null && top_right.isAlive() )       { neighbours++ }
+        if ( bottom_left != null && bottom_left.isAlive() )   { neighbours++ }
+        if ( bottom_right != null && bottom_right.isAlive() ) { neighbours++ }
 
         /* RULES BEGIN */
-        if (cell.style.backgroundColor == ALIVE) {
+        if ( cell.isAlive() ) {
 
-          if (neighbours < 2) {
+          if (neighbours < 2 || neighbours > 3) {
             cell.className = 'dead'
-          }
-
-          if (neighbours == 2 || neighbours == 3) {
+          } else {
             cell.className = 'alive'
           }
-
-          if (neighbours > 3) {
-            cell.className = 'dead'
-          }
-
         } else { // cell is dead
+
           if (neighbours == 3) {
             cell.className = 'alive'
           }
@@ -306,24 +210,21 @@ document.getElementById('start').addEventListener('click', function(){
       }
     }
 
+    /* RENDERING NEXT GENERATION */
+    for (var c=0; c < w.tbody.rows.length; c++) {
 
-    /* RENDERING THE NEXT GENERATION */
-//    if (a >= 9 && b >= 9) {
-      for (var c=0; c < w.tbody.rows.length; c++) {
-        //console.log(w.tbody.rows[c])
-        for (var d=0; d < w.tbody.rows[c].cells.length; d++) {
-          //console.log(w.tbody.rows[c].cells[d])
-          var nextCell = w.tbody.rows[c].cells[d]
-          if (nextCell.className == 'alive') {
-            nextCell.style.backgroundColor = ALIVE
-          } else {
-            nextCell.style.backgroundColor = DEAD
-          }
-          nextCell.removeAttribute('class')
+      for (var d=0; d < w.tbody.rows[c].cells.length; d++) {
+
+        var nextCell = w.tbody.rows[c].cells[d]
+        if (nextCell.className == 'alive') {
+          nextCell.style.backgroundColor = ALIVE
+        } else {
+          nextCell.style.backgroundColor = DEAD
         }
+        nextCell.removeAttribute('class')
       }
-//   }
-
+    }
+    /* END RENDERING NEXT GENERATION */
 
   }, w.speed)
 

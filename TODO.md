@@ -7,4 +7,3 @@ TODO List
 - Take a screenshot
 - Generation counter
 - Population counter
-- Tidy up the code
