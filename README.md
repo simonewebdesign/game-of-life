@@ -1,6 +1,8 @@
 John Conway's Game of Life
 ==========================
 
+![Screenshot](https://raw.github.com/simonewebdesign/game-of-life/master/public/screenshot.png)
+
 The Rules
 ---------
 
