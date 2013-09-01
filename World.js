@@ -4,6 +4,8 @@ function World(){
   this.cols = 90
   this.speed = 200 // ms
   this.tbody = null
+  this.generationCount = 0
+  this.populationCount = 0
 
   this.create = function(){
 
@@ -18,8 +20,8 @@ function World(){
         this.tbody.rows[r].appendChild(document.createElement('td'))
           .addEventListener('click', function(ev){
             this.style.backgroundColor == DEAD ? 
-            this.style.backgroundColor = ALIVE : 
-            this.style.backgroundColor = DEAD
+              this.style.backgroundColor = ALIVE : 
+              this.style.backgroundColor = DEAD
           }, false)
       }
     }
@@ -30,6 +32,9 @@ function World(){
   }
 
   this.generate = function(){
+
+    // reset population counter for this generation
+    this.populationCount = 0
 
     for (var a=0; a < this.tbody.rows.length; a++) {
 
@@ -90,23 +95,29 @@ function World(){
         if ( bottom_left != null && bottom_left.isAlive() )   { neighboursCount++ }
         if ( bottom_right != null && bottom_right.isAlive() ) { neighboursCount++ }
 
-        this.applyRulesOn(cell, neighboursCount);
+        this.applyRulesOn(cell, neighboursCount)
+
+        // log population for this generation
+        if (cell.isAlive()) {
+          this.populationCount++
+        }
+
       }
     }
   }
 
-  this.applyRulesOn = function(cell, neighbours){
+  this.applyRulesOn = function(cell, neighboursCount){
     /* RULES BEGIN */
-    if ( cell.isAlive() ) {
+    if (cell.isAlive()) {
 
-      if (neighbours < 2 || neighbours > 3) {
+      if (neighboursCount < 2 || neighboursCount > 3) {
         cell.className = 'dead'
       } else {
         cell.className = 'alive'
       }
     } else { // cell is dead
 
-      if (neighbours == 3) {
+      if (neighboursCount == 3) {
         cell.className = 'alive'
       }
     }
@@ -145,6 +156,8 @@ function World(){
         nextCell.removeAttribute('class')
       }
     }
+
+    this.generationCount++
   }
 
 } // end of World

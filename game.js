@@ -1,3 +1,13 @@
+var startButton = document.createElement('button');
+startButton.id = 'start';
+startButton.innerHTML = 'Generate';
+document.body.appendChild(startButton);
+
+var stopButton = document.createElement('button');
+stopButton.id = 'stop';
+stopButton.innerHTML = 'Freeze';
+document.body.appendChild(stopButton);
+
 /* THE GAME OF LIFE
 **
 ** 1st rule
@@ -20,18 +30,7 @@ world.spawn('glider', 15, 20)
 world.spawn('glider', 30, 4)
 
 
-var startButton = document.createElement('button');
-startButton.id = 'start';
-startButton.innerHTML = 'Generate';
-document.body.appendChild(startButton);
-
-var stopButton = document.createElement('button');
-stopButton.id = 'stop';
-stopButton.innerHTML = 'Freeze';
-document.body.appendChild(stopButton);
-
 var intervalId = 0;
-
 startButton.addEventListener('click', function(){
 
   intervalId = setInterval(function() {
