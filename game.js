@@ -1,12 +1,10 @@
-/* global constants */
 var DEAD  = '',
     ALIVE = 'rgb(0, 255, 255)'
 
-/* global functions -- TODO find a better solution */
 HTMLElement.prototype.live = function() {
   if (this.nodeName === 'TD') {
     if (this.style.backgroundColor == ALIVE) {
-      console.log('cell is already alive')
+      // cell is already alive
       return false
     }
     this.style.backgroundColor = ALIVE
@@ -17,7 +15,7 @@ HTMLElement.prototype.live = function() {
 HTMLElement.prototype.die = function() {
   if (this.nodeName === 'TD') {  
     if (this.style.backgroundColor == DEAD) {
-      console.log('cell is already dead')
+      // cell is already dead
       return false
     }
     this.style.backgroundColor = DEAD
@@ -48,62 +46,44 @@ function World () {
 
       for (var c=0; c < w.cols; c++) {
         this.tbody.rows[r].appendChild(document.createElement('td'))
-        .addEventListener('click', function(ev){
-          this.style.backgroundColor == DEAD ? 
-          this.style.backgroundColor = ALIVE : 
-          this.style.backgroundColor = DEAD
-        }, false)     
+          .addEventListener('click', function(ev){
+            this.style.backgroundColor == DEAD ? 
+            this.style.backgroundColor = ALIVE : 
+            this.style.backgroundColor = DEAD
+          }, false)
       }
     }
     document.getElementById('wrapper').appendChild(this.table)
     return true
   }
 
-  this.update = function() {
-    this.rows = 3
-    this.cols = 3
-    this.speed = 1000
-    return true
-  }
-
-  this.destroy = function() {
-    this.table.parentNode.removeChild(this.table)
-    delete this
-    if (this) {
-      console.log('something went wrong.')
-      return false
-    } else {
-      console.log('Oh, the humanity!')
-      return true
-    }
-  }
-
   this.spawn = function(name, x, y) {
 
-    if (x > 0 && y > 0) { // FIXME breaks when the shape is drawn out of bounds
-      if (name == 'glider') {
+    if (x < 0 || y < 0) {
+      return false
+    }
 
-        var shape = [
-          [2,1],
-          [3,2],
-          [3,3],
-          [2,3],
-          [1,3]
-        ]
+    if (name == 'glider') {
 
-        for (s=0; s < shape.length; s++) {
-          var cellIndex = shape[s][0]+y-2
-          var rowIndex = shape[s][1]+x-2
-          this.tbody.rows[rowIndex].cells[cellIndex].live()
-        }
-        return true
+      var shape = [
+        [2,1],
+        [3,2],
+        [3,3],
+        [2,3],
+        [1,3]
+      ]
+
+      for (s=0; s < shape.length; s++) {
+        var cellIndex = shape[s][0]+y-2
+        var rowIndex = shape[s][1]+x-2
+        this.tbody.rows[rowIndex].cells[cellIndex].live()
       }
+      return true
     }
     return false
   }
 
 } // end of World
-
 
 
 /* THE GAME OF LIFE
@@ -126,7 +106,6 @@ w.create()
 w.spawn('glider', 3, 3)
 w.spawn('glider', 15, 20)
 w.spawn('glider', 30, 4)
-
 
 
 document.getElementById('start').addEventListener('click', function(){
