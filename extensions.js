@@ -26,3 +26,8 @@ HTMLElement.prototype.die = function() {
 HTMLElement.prototype.isAlive = function() {
   return (this.nodeName === 'TD') && (this.style.backgroundColor == ALIVE)
 }
+
+HTMLElement.prototype.toggleColor = function() {
+  this.style.backgroundColor = this.style.backgroundColor == DEAD ? ALIVE : DEAD
+}
+

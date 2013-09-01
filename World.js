@@ -13,18 +13,51 @@ function World(){
     this.tbody = document.createElement('tbody')
     this.table.appendChild(this.tbody)
 
+    /* HOLDING FEATURE */
+    // on mousedown, holding = true
+    // on mouseup and on mouseleave, holding = false
+    var holding = false,
+        timeoutId = 0
+
+    this.table.addEventListener('mousedown', function(){
+
+      timeoutId = setTimeout(function() {
+        holding = true
+      }, 10)
+
+    }, false)
+
+    function release() {
+      clearTimeout(timeoutId)
+      holding = false
+    }
+    this.table.addEventListener('mouseup', function(){
+      release()
+    })
+
+    this.table.addEventListener('mouseleave', function(){
+      release()
+    })
+
     for (var r=0; r < this.rows; r++) {
       this.tbody.appendChild(document.createElement('tr'))
 
       for (var c=0; c < this.cols; c++) {
-        this.tbody.rows[r].appendChild(document.createElement('td'))
-          .addEventListener('drag', function(ev){
-            this.style.backgroundColor == DEAD ? 
-              this.style.backgroundColor = ALIVE : 
-              this.style.backgroundColor = DEAD
+
+        var td = this.tbody.rows[r].appendChild(document.createElement('td'))
+
+          td.addEventListener('mouseover', function(ev){
+            if (holding) {
+              this.toggleColor()
+            }
+          }, false)
+
+          td.addEventListener('click', function(ev){
+            this.toggleColor()
           }, false)
       }
     }
+    /* END HOLDING FEATURE */
 
     var milkyWay = document.createElement('div')
     milkyWay.appendChild(this.table)
