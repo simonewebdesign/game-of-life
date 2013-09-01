@@ -1,8 +1,8 @@
 function World(){ 
 
-  this.rows = 60
-  this.cols = 90
-  this.speed = 200 // ms
+  this.rows = 48
+  this.cols = 64
+  this.speed = 224 // ms
   this.tbody = null
   this.generationCount = 0
   this.populationCount = 0
