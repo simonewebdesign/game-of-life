@@ -32,7 +32,7 @@ HTMLElement.prototype.isAlive = function() {
 function World () { 
   this.rows = 60
   this.cols = 90
-  this.speed = 500 // ms
+  this.speed = 200 // ms
   this.tbody = null
 
   this.create = function() {
@@ -53,7 +53,10 @@ function World () {
           }, false)
       }
     }
-    document.getElementById('wrapper').appendChild(this.table)
+
+    var milkyWay = document.createElement('div');
+    milkyWay.appendChild(this.table)
+    document.body.appendChild(milkyWay);
     return true
   }
 
@@ -64,26 +67,27 @@ function World () {
     }
 
     if (name == 'glider') {
-
-      var shape = [
-        [2,1],
-        [3,2],
-        [3,3],
-        [2,3],
-        [1,3]
-      ]
-
-      for (s=0; s < shape.length; s++) {
-        var cellIndex = shape[s][0]+y-2
-        var rowIndex = shape[s][1]+x-2
-        this.tbody.rows[rowIndex].cells[cellIndex].live()
-      }
-      return true
+      var shape = [ [2,1], [3,2], [3,3], [2,3], [1,3] ]
     }
-    return false
+
+    for (s=0; s < shape.length; s++) {
+      var cellIndex = shape[s][0]+y-2
+      var rowIndex = shape[s][1]+x-2
+      this.tbody.rows[rowIndex].cells[cellIndex].live()
+    }
   }
 
 } // end of World
+
+var startButton = document.createElement('button');
+startButton.id = 'start';
+startButton.innerHTML = 'Generate';
+document.body.appendChild(startButton);
+
+var stopButton = document.createElement('button');
+stopButton.id = 'stop';
+stopButton.innerHTML = 'Freeze';
+document.body.appendChild(stopButton);
 
 
 /* THE GAME OF LIFE
@@ -108,103 +112,123 @@ w.spawn('glider', 15, 20)
 w.spawn('glider', 30, 4)
 
 
-document.getElementById('start').addEventListener('click', function(){
+var generate = function(){
 
-  setInterval(function(){
+  for (var a=0; a < w.tbody.rows.length; a++) {
 
-    for (var a=0; a < w.tbody.rows.length; a++) {
+    for (var b=0; b < w.tbody.rows[a].cells.length; b++) {
 
-      for (var b=0; b < w.tbody.rows[a].cells.length; b++) {
+      var cell = w.tbody.rows[a].cells[b]
 
-        var cell = w.tbody.rows[a].cells[b]
+      var x = cell.cellIndex
+      var y = cell.parentNode.rowIndex
 
-        var x = cell.cellIndex
-        var y = cell.parentNode.rowIndex
+      var xOffset = w.tbody.rows[0].cells.length-1
+      var yOffset = w.tbody.rows.length-1
 
-        var xOffset = w.tbody.rows[0].cells.length-1
-        var yOffset = w.tbody.rows.length-1
+      /* NEIGHBOURS */
 
-        /* NEIGHBOURS */
+      /* TOP */
+      var top = (y <= 0) ? 
+      null :
+      w.tbody.rows[y-1].cells[x]
+      /* RIGHT */
+      var right = (x >= xOffset) ?
+      null :
+      w.tbody.rows[y].cells[x+1]
+      /* BOTTOM */
+      var bottom = (y >= yOffset) ?
+      null :
+      w.tbody.rows[y+1].cells[x]      
+      /* LEFT */
+      var left = (x <= 0) ?
+      null :
+      w.tbody.rows[y].cells[x-1]
+      /* TOP_LEFT */
+      var top_left = (y <= 0 || x <= 0) ? 
+      null :
+      w.tbody.rows[y-1].cells[x-1]
+      /* TOP_RIGHT */
+      var top_right = (y <= 0 || x >= xOffset) ? 
+      null :
+      w.tbody.rows[y-1].cells[x+1]
+      /* BOTTOM_LEFT */
+      var bottom_left = (y >= yOffset || x <= 0) ? 
+      null :
+      w.tbody.rows[y+1].cells[x-1]
+      /* BOTTOM_RIGHT */
+      var bottom_right = (y >= yOffset || x >= xOffset) ?
+      null :
+      w.tbody.rows[y+1].cells[x+1]
 
-        /* TOP */
-        var top = (y <= 0) ? 
-        null :
-        w.tbody.rows[y-1].cells[x]
-        /* RIGHT */
-        var right = (x >= xOffset) ?
-        null :
-        w.tbody.rows[y].cells[x+1]
-        /* BOTTOM */
-        var bottom = (y >= yOffset) ?
-        null :
-        w.tbody.rows[y+1].cells[x]      
-        /* LEFT */
-        var left = (x <= 0) ?
-        null :
-        w.tbody.rows[y].cells[x-1]
-        /* TOP_LEFT */
-        var top_left = (y <= 0 || x <= 0) ? 
-        null :
-        w.tbody.rows[y-1].cells[x-1]
-        /* TOP_RIGHT */
-        var top_right = (y <= 0 || x >= xOffset) ? 
-        null :
-        w.tbody.rows[y-1].cells[x+1]
-        /* BOTTOM_LEFT */
-        var bottom_left = (y >= yOffset || x <= 0) ? 
-        null :
-        w.tbody.rows[y+1].cells[x-1]
-        /* BOTTOM_RIGHT */
-        var bottom_right = (y >= yOffset || x >= xOffset) ?
-        null :
-        w.tbody.rows[y+1].cells[x+1]
+      /* NEIGHBOURS COUNT */
+      var neighbours = 0
 
-        /* NEIGHBOURS COUNT */
-        var neighbours = 0
+      if ( top != null && top.isAlive() )                   { neighbours++ }
+      if ( right != null && right.isAlive() )               { neighbours++ }
+      if ( bottom != null && bottom.isAlive() )             { neighbours++ }
+      if ( left != null && left.isAlive() )                 { neighbours++ }
+      if ( top_left != null && top_left.isAlive() )         { neighbours++ }
+      if ( top_right != null && top_right.isAlive() )       { neighbours++ }
+      if ( bottom_left != null && bottom_left.isAlive() )   { neighbours++ }
+      if ( bottom_right != null && bottom_right.isAlive() ) { neighbours++ }
 
-        if ( top != null && top.isAlive() )                   { neighbours++ }
-        if ( right != null && right.isAlive() )               { neighbours++ }
-        if ( bottom != null && bottom.isAlive() )             { neighbours++ }
-        if ( left != null && left.isAlive() )                 { neighbours++ }
-        if ( top_left != null && top_left.isAlive() )         { neighbours++ }
-        if ( top_right != null && top_right.isAlive() )       { neighbours++ }
-        if ( bottom_left != null && bottom_left.isAlive() )   { neighbours++ }
-        if ( bottom_right != null && bottom_right.isAlive() ) { neighbours++ }
+      /* RULES BEGIN */
+      if ( cell.isAlive() ) {
 
-        /* RULES BEGIN */
-        if ( cell.isAlive() ) {
-
-          if (neighbours < 2 || neighbours > 3) {
-            cell.className = 'dead'
-          } else {
-            cell.className = 'alive'
-          }
-        } else { // cell is dead
-
-          if (neighbours == 3) {
-            cell.className = 'alive'
-          }
-        }
-        /* RULES END */
-      }
-    }
-
-    /* RENDERING NEXT GENERATION */
-    for (var c=0; c < w.tbody.rows.length; c++) {
-
-      for (var d=0; d < w.tbody.rows[c].cells.length; d++) {
-
-        var nextCell = w.tbody.rows[c].cells[d]
-        if (nextCell.className == 'alive') {
-          nextCell.style.backgroundColor = ALIVE
+        if (neighbours < 2 || neighbours > 3) {
+          cell.className = 'dead'
         } else {
-          nextCell.style.backgroundColor = DEAD
+          cell.className = 'alive'
         }
-        nextCell.removeAttribute('class')
+      } else { // cell is dead
+
+        if (neighbours == 3) {
+          cell.className = 'alive'
+        }
       }
+      /* RULES END */
     }
-    /* END RENDERING NEXT GENERATION */
+  }
+
+  /* RENDERING NEXT GENERATION */
+  for (var c=0; c < w.tbody.rows.length; c++) {
+
+    for (var d=0; d < w.tbody.rows[c].cells.length; d++) {
+
+      var nextCell = w.tbody.rows[c].cells[d]
+      if (nextCell.className == 'alive') {
+        nextCell.style.backgroundColor = ALIVE
+      } else {
+        nextCell.style.backgroundColor = DEAD
+      }
+      nextCell.removeAttribute('class')
+    }
+  }
+  /* END RENDERING NEXT GENERATION */
+
+} 
+
+var intervalId = 0;
+
+startButton.addEventListener('click', function(){
+
+  intervalId = setInterval(function() {
+
+    generate()
+
+    console.log(intervalId)
 
   }, w.speed)
+
+
+
+}, false)
+
+stopButton.addEventListener('click', function(){
+
+  clearInterval(intervalId)
+
+  console.log('stopped. ' + intervalId)
 
 }, false)
