@@ -18,7 +18,7 @@ function World(){
 
       for (var c=0; c < this.cols; c++) {
         this.tbody.rows[r].appendChild(document.createElement('td'))
-          .addEventListener('click', function(ev){
+          .addEventListener('drag', function(ev){
             this.style.backgroundColor == DEAD ? 
               this.style.backgroundColor = ALIVE : 
               this.style.backgroundColor = DEAD
