@@ -81,52 +81,11 @@ function World(){
         var xOffset = this.tbody.rows[0].cells.length-1,
             yOffset = this.tbody.rows.length-1
 
-        /* NEIGHBOURS */
+        // Get the number of neighbours of the current cell.
+        // Needed for applying the rules
+        var neighboursCount = this.countNeighbours(x, y, xOffset, yOffset)
 
-        /* TOP */
-        var top = (y <= 0) ? null :
-        this.tbody.rows[y-1].cells[x]
-
-        /* RIGHT */
-        ,   right = (x >= xOffset) ? null :
-        this.tbody.rows[y].cells[x+1]
-
-        /* BOTTOM */
-        ,   bottom = (y >= yOffset) ? null :
-        this.tbody.rows[y+1].cells[x]   
-
-        /* LEFT */
-        ,   left = (x <= 0) ? null :
-        this.tbody.rows[y].cells[x-1]
-
-        /* TOP_LEFT */
-        ,   top_left = (y <= 0 || x <= 0) ? null :
-        this.tbody.rows[y-1].cells[x-1]
-
-        /* TOP_RIGHT */
-        ,   top_right = (y <= 0 || x >= xOffset) ? null :
-        this.tbody.rows[y-1].cells[x+1]
-
-        /* BOTTOM_LEFT */
-        ,   bottom_left = (y >= yOffset || x <= 0) ? null :
-        this.tbody.rows[y+1].cells[x-1]
-
-        /* BOTTOM_RIGHT */
-        ,   bottom_right = (y >= yOffset || x >= xOffset) ? null :
-        this.tbody.rows[y+1].cells[x+1]
-
-        /* NEIGHBOURS COUNT */
-        var neighboursCount = 0
-
-        if (top          && top.isAlive())          neighboursCount++
-        if (right        && right.isAlive())        neighboursCount++
-        if (bottom       && bottom.isAlive())       neighboursCount++
-        if (left         && left.isAlive())         neighboursCount++
-        if (top_left     && top_left.isAlive())     neighboursCount++
-        if (top_right    && top_right.isAlive())    neighboursCount++
-        if (bottom_left  && bottom_left.isAlive())  neighboursCount++
-        if (bottom_right && bottom_right.isAlive()) neighboursCount++
-
+        // Apply the rules on the current cell
         this.applyRulesOn(cell, neighboursCount)
 
         // log population for this generation
@@ -187,6 +146,48 @@ function World(){
     }
 
     this.generationCount++
+  }
+
+  // This function is CPU intensive and should be refactored.
+  // Maybe a better way to do this is by using Vector2D
+  this.countNeighbours = function(x, y, xOffset, yOffset){
+
+    var top = (y <= 0) ? null :
+    this.tbody.rows[y-1].cells[x]
+
+    ,   right = (x >= xOffset) ? null :
+    this.tbody.rows[y].cells[x+1]
+
+    ,   bottom = (y >= yOffset) ? null :
+    this.tbody.rows[y+1].cells[x]   
+
+    ,   left = (x <= 0) ? null :
+    this.tbody.rows[y].cells[x-1]
+
+    ,   top_left = (y <= 0 || x <= 0) ? null :
+    this.tbody.rows[y-1].cells[x-1]
+
+    ,   top_right = (y <= 0 || x >= xOffset) ? null :
+    this.tbody.rows[y-1].cells[x+1]
+
+    ,   bottom_left = (y >= yOffset || x <= 0) ? null :
+    this.tbody.rows[y+1].cells[x-1]
+
+    ,   bottom_right = (y >= yOffset || x >= xOffset) ? null :
+    this.tbody.rows[y+1].cells[x+1]
+
+    var neighboursCount = 0
+
+    if (top          && top.isAlive())          neighboursCount++
+    if (right        && right.isAlive())        neighboursCount++
+    if (bottom       && bottom.isAlive())       neighboursCount++
+    if (left         && left.isAlive())         neighboursCount++
+    if (top_left     && top_left.isAlive())     neighboursCount++
+    if (top_right    && top_right.isAlive())    neighboursCount++
+    if (bottom_left  && bottom_left.isAlive())  neighboursCount++
+    if (bottom_right && bottom_right.isAlive()) neighboursCount++
+
+    return neighboursCount
   }
 
 } // end of World
