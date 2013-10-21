@@ -119,22 +119,19 @@ function World(){
         /* NEIGHBOURS COUNT */
         var neighboursCount = 0
 
-        if ( top != null && top.isAlive() )                   { neighboursCount++ }
-        if ( right != null && right.isAlive() )               { neighboursCount++ }
-        if ( bottom != null && bottom.isAlive() )             { neighboursCount++ }
-        if ( left != null && left.isAlive() )                 { neighboursCount++ }
-        if ( top_left != null && top_left.isAlive() )         { neighboursCount++ }
-        if ( top_right != null && top_right.isAlive() )       { neighboursCount++ }
-        if ( bottom_left != null && bottom_left.isAlive() )   { neighboursCount++ }
-        if ( bottom_right != null && bottom_right.isAlive() ) { neighboursCount++ }
+        if (top          && top.isAlive())          neighboursCount++
+        if (right        && right.isAlive())        neighboursCount++
+        if (bottom       && bottom.isAlive())       neighboursCount++
+        if (left         && left.isAlive())         neighboursCount++
+        if (top_left     && top_left.isAlive())     neighboursCount++
+        if (top_right    && top_right.isAlive())    neighboursCount++
+        if (bottom_left  && bottom_left.isAlive())  neighboursCount++
+        if (bottom_right && bottom_right.isAlive()) neighboursCount++
 
         this.applyRulesOn(cell, neighboursCount)
 
         // log population for this generation
-        if (cell.isAlive()) {
-          this.populationCount++
-        }
-
+        if (cell.isAlive()) this.populationCount++
       }
     }
   }
