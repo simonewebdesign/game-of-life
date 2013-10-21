@@ -36,7 +36,10 @@ button:disabled {
   color: #8a8;
   cursor: default;
 }
-button:active {
+
+button:active,
+/* input:hover, */
+button:hover:not(:disabled) {
   background: #444;
   color: #bfb;
 }

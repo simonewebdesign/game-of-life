@@ -75,45 +75,44 @@ function World(){
 
         var cell = this.tbody.rows[a].cells[b]
 
-        var x = cell.cellIndex
-        var y = cell.parentNode.rowIndex
+        var x = cell.cellIndex,
+            y = cell.parentNode.rowIndex
 
-        var xOffset = this.tbody.rows[0].cells.length-1
-        var yOffset = this.tbody.rows.length-1
+        var xOffset = this.tbody.rows[0].cells.length-1,
+            yOffset = this.tbody.rows.length-1
 
         /* NEIGHBOURS */
 
         /* TOP */
-        var top = (y <= 0) ? 
-        null :
+        var top = (y <= 0) ? null :
         this.tbody.rows[y-1].cells[x]
+
         /* RIGHT */
-        var right = (x >= xOffset) ?
-        null :
+        ,   right = (x >= xOffset) ? null :
         this.tbody.rows[y].cells[x+1]
+
         /* BOTTOM */
-        var bottom = (y >= yOffset) ?
-        null :
-        this.tbody.rows[y+1].cells[x]      
+        ,   bottom = (y >= yOffset) ? null :
+        this.tbody.rows[y+1].cells[x]   
+
         /* LEFT */
-        var left = (x <= 0) ?
-        null :
+        ,   left = (x <= 0) ? null :
         this.tbody.rows[y].cells[x-1]
+
         /* TOP_LEFT */
-        var top_left = (y <= 0 || x <= 0) ? 
-        null :
+        ,   top_left = (y <= 0 || x <= 0) ? null :
         this.tbody.rows[y-1].cells[x-1]
+
         /* TOP_RIGHT */
-        var top_right = (y <= 0 || x >= xOffset) ? 
-        null :
+        ,   top_right = (y <= 0 || x >= xOffset) ? null :
         this.tbody.rows[y-1].cells[x+1]
+
         /* BOTTOM_LEFT */
-        var bottom_left = (y >= yOffset || x <= 0) ? 
-        null :
+        ,   bottom_left = (y >= yOffset || x <= 0) ? null :
         this.tbody.rows[y+1].cells[x-1]
+
         /* BOTTOM_RIGHT */
-        var bottom_right = (y >= yOffset || x >= xOffset) ?
-        null :
+        ,   bottom_right = (y >= yOffset || x >= xOffset) ? null :
         this.tbody.rows[y+1].cells[x+1]
 
         /* NEIGHBOURS COUNT */
@@ -156,14 +155,14 @@ function World(){
 
   this.spawn = function(name, x, y){
 
-    if (x < 0 || y < 0) {
-      return false
-    }
+    if (x < 0 || y < 0) return false
 
-    if (name == 'glider') {
-      var shape = [ [2,1], [3,2], [3,3], [2,3], [1,3] ]
-    }
+    var shape = []
 
+    // define shape by name
+    if (name == 'glider') shape = [[2,1], [3,2], [3,3], [2,3], [1,3]]
+
+    // draw shape
     for (s=0; s < shape.length; s++) {
       var cellIndex = shape[s][0]+y-2
       var rowIndex = shape[s][1]+x-2
