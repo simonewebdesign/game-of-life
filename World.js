@@ -21,6 +21,8 @@ function World(){
 
     this.table.addEventListener('mousedown', function(){
 
+      // somebody started holding the mouse button:
+      // keep track of how much time he holds the button.
       timeoutId = setTimeout(function() {
         holding = true
       }, 10)
@@ -31,21 +33,19 @@ function World(){
       clearTimeout(timeoutId)
       holding = false
     }
-    this.table.addEventListener('mouseup', function(){
-      release()
-    })
+    this.table.addEventListener('mouseup',    function(){ release() })
+    this.table.addEventListener('mouseleave', function(){ release() })
 
-    this.table.addEventListener('mouseleave', function(){
-      release()
-    })
-
+    // Creating rows and columns...
     for (var r=0; r < this.rows; r++) {
+
       this.tbody.appendChild(document.createElement('tr'))
 
       for (var c=0; c < this.cols; c++) {
 
         var td = this.tbody.rows[r].appendChild(document.createElement('td'))
 
+          // Attaching event handlers for toggling life on cells 
           td.addEventListener('mouseover', function(ev){
             if (holding) {
               this.toggleColor()
