@@ -1,14 +1,3 @@
-var startButton = document.createElement('button')
-startButton.id = 'start'
-startButton.innerHTML = 'Generate'
-document.body.appendChild(startButton)
-
-var stopButton = document.createElement('button')
-stopButton.id = 'stop'
-stopButton.innerHTML = 'Freeze'
-stopButton.disabled = true
-document.body.appendChild(stopButton)
-
 /* THE GAME OF LIFE
 **
 ** 1st rule
@@ -31,9 +20,10 @@ world.spawn('glider', 15, 20)
 world.spawn('glider', 30, 4)
 
 
-var intervalId = 0;
+var intervalId = 0
 startButton.addEventListener('click', function(){
 
+  // Toggle button state
   this.disabled = true
   stopButton.disabled = false
 
@@ -42,14 +32,21 @@ startButton.addEventListener('click', function(){
     world.generate()
     world.renderNextGeneration()
 
+    // Update counters
+    generationCounter.value = world.generationCount
+    populationCounter.value = world.populationCount
+
   }, world.speed)
 
 }, false)
 
 stopButton.addEventListener('click', function(){
 
+  // Toggle button state
   this.disabled = true
   startButton.disabled = false
 
+  // Freeze generation
   clearInterval(intervalId)
+
 }, false)

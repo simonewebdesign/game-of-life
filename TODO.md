@@ -2,6 +2,5 @@ TODO List
 =========
 
 - Dynamic speed of life
-- Better graphics
-- Generation counter
-- Population counter
+- Dynamic world boundaries
+- Better graphics (leave a footprint in the next generation, when a cell dies)
