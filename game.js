@@ -1,13 +1,13 @@
-var startButton = document.createElement('button');
-startButton.id = 'start';
-startButton.innerHTML = 'Generate';
-document.body.appendChild(startButton);
+var startButton = document.createElement('button')
+startButton.id = 'start'
+startButton.innerHTML = 'Generate'
+document.body.appendChild(startButton)
 
-var stopButton = document.createElement('button');
-stopButton.id = 'stop';
-stopButton.innerHTML = 'Freeze';
-stopButton.disabled = true;
-document.body.appendChild(stopButton);
+var stopButton = document.createElement('button')
+stopButton.id = 'stop'
+stopButton.innerHTML = 'Freeze'
+stopButton.disabled = true
+document.body.appendChild(stopButton)
 
 /* THE GAME OF LIFE
 **
@@ -34,8 +34,8 @@ world.spawn('glider', 30, 4)
 var intervalId = 0;
 startButton.addEventListener('click', function(){
 
-  this.disabled = true;
-  stopButton.disabled = false;
+  this.disabled = true
+  stopButton.disabled = false
 
   intervalId = setInterval(function() {
 
@@ -48,8 +48,8 @@ startButton.addEventListener('click', function(){
 
 stopButton.addEventListener('click', function(){
 
-  this.disabled = true;
-  startButton.disabled = false;
+  this.disabled = true
+  startButton.disabled = false
 
   clearInterval(intervalId)
 }, false)
